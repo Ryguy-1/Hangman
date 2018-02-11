@@ -21,6 +21,7 @@ public class Main implements KeyListener{
 	JPanel panel = new JPanel();
 	JLabel labelLives = new JLabel();
 	JLabel labelWord = new JLabel();
+	JLabel letters = new JLabel();
 	static ArrayList<String> list = new ArrayList<String>();
 	Font font = new Font(labelLives.getFont().getName(),labelLives.getFont().getStyle(), 50);
 	Font font2 = new Font(labelWord.getFont().getName(),labelWord.getFont().getStyle(), 100);
@@ -29,6 +30,9 @@ public class Main implements KeyListener{
 	static String realWord = "";
 	static String tempWord = "";
 	static int counter = 0;
+	static boolean win = false;
+	static boolean lose = false;
+	static String lettersGuessed = "";
 public static void main(String[] args) {
 	Main main = new Main();
 	main.setup();
@@ -61,7 +65,7 @@ public static void main(String[] args) {
 			
 	}
 	realWord = list.get(0);
-	System.out.println(realWord);
+	//System.out.println(realWord);
 	for (int i = 0; i < realWord.length(); i++) {
 			word+="-";
 			main.updateText();
@@ -79,10 +83,14 @@ void setup() {
 	frame.setVisible(true);
 	panel.add(labelLives);
 	panel.add(labelWord);
+	panel.add(letters);
+	letters.setFont(font);
+	letters.setText("Letters Guessed: "+lettersGuessed);
 	labelWord.setText(System.lineSeparator()+word);
 	labelLives.setText("Lives: "+lives);
 	labelLives.setFont(font);
 	labelWord.setFont(font2);
+	
 	frame.pack();
 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -90,9 +98,21 @@ void setup() {
 void updateText() {
 	labelWord.setText(System.lineSeparator()+word);
 	labelLives.setText("Lives: "+lives);
+	letters.setText("Letters Guessed: "+lettersGuessed);
 	frame.pack();
-	
+	if(win == true) {
+		labelLives.setVisible(false);
+		letters.setVisible(false);
+		labelWord.setText("!!YOU WIN!!");
+		frame.pack();	
+	}else if(lose == true) {
+		labelLives.setText("Real Word: "+realWord);
+		labelWord.setText("!!YOU LOSE!!");
+		frame.pack();
+	}
 }
+	
+	
 
 @Override
 public void keyTyped(KeyEvent e) {
@@ -103,7 +123,7 @@ public void keyTyped(KeyEvent e) {
 @Override
 public void keyPressed(KeyEvent e) {
 	// TODO Auto-generated method stub
-	System.out.println(word);
+//	System.out.println(word);
 	if(realWord.contains(""+e.getKeyChar())) {
 		for (int i = 0; i < realWord.length(); i++) {
 			if(realWord.charAt(i)==e.getKeyChar()) {
@@ -116,22 +136,37 @@ public void keyPressed(KeyEvent e) {
 		tempWord = "";
 	}else {
 		lives-=1;
+		lettersGuessed += e.getKeyChar();
+		lettersGuessed += " ";
 	}
-	System.out.println(word);
-	System.out.println(realWord);
-	if(word==realWord) {
-		
+	//System.out.println();
+	//System.out.println("word: "+word);
+	//System.out.println("realWord: "+realWord);
+
+	 if(lives==0) {
+		lose = true;
+	}else if(word.equals(realWord)) {
+		//System.out.println("Next");
+		lettersGuessed="";
+		lives+=1;
 		counter+=1;
-		realWord=list.get(counter);
+		if(list.size()>counter) {
+			realWord=list.get(counter);
+		}else {
+			win=true;
+		}
+		word = "";
 		for (int i = 0; i < realWord.length(); i++) {
+			
 			word+="-";
 		}
 		tempWord = "";
-		
-		//need to work out how to go to the next word
 	}
-	updateText();
 	
+	
+	updateText();
+	//System.out.println("word: "+word);
+	//System.out.println("realWord: "+realWord);
 	
 }
 @Override
