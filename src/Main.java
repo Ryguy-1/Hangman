@@ -42,7 +42,7 @@ public static void main(String[] args) {
 		try {
 			Random rand = new Random();
 			int randy = rand.nextInt(3000);
-			BufferedReader br = new BufferedReader(new FileReader("/Users/league/Desktop/Hangman/src/dictionary.txt"));
+			BufferedReader br = new BufferedReader(new FileReader("C:\\Users\\Ryland Birchmeier\\Desktop\\Hangman\\src\\dictionary.txt"));
 			String line = br.readLine();
 			int ctr = 0;
 			
